@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Name Manager</title>
+        <style>
+            body{
+                background: rgb(201, 242, 243);
+            }
+
+            .container{
+                width: 500px;
+                margin: 30px auto;
+                background: rgb(255, 254, 254);
+                padding: 20px;
+                border-radius: 8px;
+            }
+
+            input{
+                width: 300px;
+                padding: 8px;
+            }
+
+            button{
+                padding: 9px 20px;
+            }
+
+            h3{
+                margin: 15px 0px;
+            }
+
+            ul{
+                list-style: none;
+                padding:0px
+            }
+
+            li{
+                background: rgb(216, 216, 248);
+                margin: 10px 0;
+                padding: 10px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 5px;
+            }
+
+            .delete{
+                background: red;
+                color: rgb(255, 255, 255);
+                border-radius: 15px;
+                padding: 5px 10px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class="container">
+            <h1>Student Name Manager</h1>
+
+            <input type="text" id="studentName" placeholder="Enter student name">
+            <button onclick="addStudent()">Add Student</button>
+
+            <h3>Total Students: <span id="count">0</span></h3>
+
+            <ul id="studentList"></ul>
+        </div>
+
+        <script>
+            let students=[];
+
+            function addStudent(){
+                const input=document.getElementById("studentName");
+                const name=input.value.trim();
+
+                if(name===""){
+                    alert("student name cannot be empty!!!");
+                    return;
+                }
+
+                students.push(name);
+                input.value="";
+                displayStudents();
+            }
+
+            function displayStudents(){
+                const list=document.getElementById("studentList");
+                list.innerHTML="";
+                
+                students.forEach((student,index)=>{
+                    list.innerHTML+=
+                    `<li>
+                    ${index+1}. ${student}
+                    <button class="delete" onclick="deleteStudent(${index})">remove</button>
+                    </li>`;
+                });
+                document.getElementById("count").textContent=students.length;
+            }
+
+            function deleteStudent(index){
+                students.splice(index,1);
+                displayStudents();
+            }
+        </script>
+    </body>
+</html>

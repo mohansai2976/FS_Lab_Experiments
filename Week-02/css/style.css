@@ -1,0 +1,264 @@
+header{
+    background-color: darkblue;
+    display: flex;
+    align-items: center;
+    padding: 15px;
+
+
+}
+
+header img{
+    width: 70px;
+    height: 70px;
+    
+    margin-left: 50px;
+}
+
+.title{
+    flex: 1;
+    text-align: center;
+}
+.title h1{
+    color: aliceblue;
+    margin: 0;
+}
+.title h3{
+    color: brown;
+    margin: 5px 0 0;
+}
+nav{
+    background-color: blue;
+    text-align: center;
+    padding: 15px;
+}
+nav a{
+    color: aliceblue;
+    margin: 30px;
+    font-size: 18px;
+}
+
+.hero{
+    position: relative;
+}
+
+
+.hero video{
+    width: 100%;
+}
+
+.text{
+    position: absolute;
+    color: white;
+    text-align: center;
+    top: 70%;
+    left: 40%;
+    
+    transform: translate(-50%,-50%);
+    font-size: 50px;
+}
+
+marquee{
+    background-color: darkblue;
+    color: white;
+    font-size: 18px;
+    font-weight: 100;
+    padding-bottom: 10px;
+}
+
+.stats{
+    display: flex;
+    justify-content: space-evenly;
+    margin: 30px;
+}
+
+.box{
+    box-shadow: 5px 5px 10px gray;
+    width: 200px;
+    padding: 20px;
+    text-align: center;
+    background-color: lightblue;
+    border-radius: 10px;
+}
+
+.box h2{
+    color: darkblue;
+}
+
+.box p{
+    font-size: 18px;
+}
+
+footer{
+    background-color: darkblue;
+    color: white;
+    text-align: center;
+    padding: 10px;
+}
+
+footer p{
+    margin: 5px;
+}
+
+.heading{
+    color: darkblue;
+    text-align: center;
+}
+.f1{
+    padding-bottom: 0%;
+}
+.box1{
+   
+    box-shadow: 5px 5px 10px whitesmoke;
+   
+    margin-left: 5%;
+    margin-right: 5%;
+    margin-bottom: 5%;
+    background-color: whitesmoke;
+    
+}
+
+.box2{
+   
+    box-shadow: 5px 5px 10px whitesmoke;
+   
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-bottom: 5%;
+    background-color: whitesmoke;
+    
+}
+td{
+    padding:15px;
+    width:100px;
+}
+
+.register-buttons{
+    width: 220px;
+    margin: 20px auto;
+}
+
+.register-buttons .butn{
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+}
+
+.Notice{
+    margin-top: 10%;
+    border-left-color: darkgoldenrod ;
+    border-left-width:  10px;
+    border-left-style: solid ;
+    background-color: yellow;
+    margin-left: 20px;
+    margin-right: 20px;
+    margin-bottom: 10%;
+}
+.box3{
+   
+    box-shadow: 5px 5px 10px whitesmoke;
+    
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-bottom: 0%;
+    background-color: whitesmoke;
+    
+}
+
+
+
+
+main h2 {
+    text-align: center;
+    color: #333;
+}
+
+
+.login-box {
+    width: 400px;
+    background-color: white;
+    height: 200px;
+    margin: 20px auto;
+    padding: 15px;
+
+    border-radius: 5px;
+    box-shadow: 0px 0px 8px gray;
+}
+
+
+label {
+    display: block;
+    font-size: 12px;
+    margin-top: 10px;
+}
+
+
+input {
+    width: 100%;
+    height: 25px;
+    box-sizing: border-box;
+}
+
+
+button {
+    width: 100%;
+    margin-top: 20%;
+
+    height: 25px;
+
+    background-color: #00658f;
+    color: white;
+
+    border: none;
+}
+.f2{
+    margin-top: 15%;
+}
+
+.tb{
+    height: 10px;
+    width:90%;
+    padding: 2px;
+    
+}
+.tb thead{
+    background-color: blueviolet;
+    color: white;
+}
+
+.placement-highlights{
+    width:70%;
+    margin:30px auto;
+    display:flex;
+    justify-content:space-between;
+    background:#0b4b83;
+    padding:20px;
+    border-radius:8px;
+}
+
+.placement-card{
+    width:28%;
+    background:white;
+    text-align:center;
+    padding:15px;
+    border-radius:8px;
+    box-shadow:0 2px 5px gray;
+}
+
+.placement-card h2{
+    color:#1f7dd4;
+    margin:0;
+}
+
+.placement-card p{
+    margin-top:8px;
+    font-size:12px;
+    color:gray;
+}
+
+.f4{
+    margin-top: 10%;
+    
+}
+.f5{
+    height: 0px;
+}
