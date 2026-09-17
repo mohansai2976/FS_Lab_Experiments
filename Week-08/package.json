@@ -1,0 +1,13 @@
+{
+  "name": "mini-web-application",
+  "version": "1.0.0",
+  "description": "Mini web application using Node.js and Express.js",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
