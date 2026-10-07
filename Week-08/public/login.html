@@ -1,48 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login - BankEase</title>
-  <link rel="stylesheet" href="/css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Login - BusGo</title><link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a class="logo" href="/">BankEase</a>
-    <div>
-      <a class="nav-link" href="/">Home</a>
-      <a class="nav-link" href="/register">Register</a>
-      <a class="nav-link active" href="/login">Login</a>
-    </div>
-  </nav>
-
-  <main class="form-page">
-    <div class="form-card login-card">
-      <div class="login-icon">↪</div>
-      <div class="form-heading">
-        <p class="eyebrow">WELCOME BACK</p>
-        <h1>Login to BankEase</h1>
-        <p>Use your username/email and password to continue.</p>
-      </div>
-
-      <form action="/login" method="POST" onsubmit="return validateLogin()">
-        <div class="input-group">
-          <label for="username">Username or Email</label>
-          <input type="text" id="username" name="username" placeholder="Enter username or email" required>
-        </div>
-
-        <div class="input-group">
-          <label for="password">Password</label>
-          <input type="password" id="password" name="password" placeholder="Enter password" required>
-        </div>
-
-        <button class="btn full-btn" type="submit">Login</button>
-      </form>
-
-      <p class="form-footer">Don't have an account? <a href="/register">Register here</a></p>
-    </div>
-  </main>
-
-  <script src="/js/script.js"></script>
+<header><nav class="navbar"><a class="brand" href="index.html">🚌 BusGo</a><div><a href="index.html">Home</a><a href="register.html">Register</a></div></nav></header>
+<main class="form-page">
+<div class="form-card small">
+<h2>Welcome back</h2><p>Login to manage your bus bookings.</p>
+<form id="loginForm">
+<label>Username or Email<input name="identifier" required></label>
+<label>Password<input type="password" name="password" required></label>
+<button class="btn primary full" type="submit">Login</button>
+<p id="message" class="message"></p>
+</form>
+<p>New user? <a href="register.html">Create an account</a></p>
+</div>
+</main>
+<script src="js/script.js"></script>
 </body>
 </html>

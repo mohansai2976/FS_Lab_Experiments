@@ -1,24 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard - BankEase</title>
-  <link rel="stylesheet" href="/css/style.css">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard - BusGo</title><link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <nav class="navbar">
-    <a class="logo" href="/">BankEase</a>
-    <div>
-      <a class="nav-link" href="/">Home</a>
-      <a class="nav-link" href="/login">Logout</a>
-    </div>
-  </nav>
+<header><nav class="navbar"><a class="brand" href="dashboard.html">🚌 BusGo</a><div><a href="#book">Book Bus</a><a href="#history">My Bookings</a><button id="logout" class="nav-btn">Logout</button></div></nav></header>
+<main class="dashboard">
+<section class="welcome"><div><span class="badge">USER DASHBOARD</span><h1>Hello, <span id="userName">Traveler</span> 👋</h1><p>Plan your next bus journey.</p></div></section>
 
-  <main class="dashboard">
-    <h1>Banking Dashboard</h1>
-    <p>Please log in through the login page to access your account.</p>
-    <a class="btn" href="/login">Go to Login</a>
-  </main>
+<section id="book" class="panel">
+<h2>Search & Book a Bus</h2>
+<div class="search-grid">
+<label>From<select id="from"><option value="">Any</option></select></label>
+<label>To<select id="to"><option value="">Any</option></select></label>
+<label>Journey Date<input id="date" type="date"></label>
+<button class="btn primary" id="searchBtn">Search Buses</button>
+</div>
+<div id="busList" class="bus-list"></div>
+</section>
+
+<section id="history" class="panel">
+<h2>My Bookings</h2>
+<div id="bookingList"></div>
+</section>
+</main>
+
+<div id="modal" class="modal hidden">
+<div class="modal-card">
+<button class="close" id="closeModal">×</button>
+<h2>Confirm Booking</h2>
+<div id="selectedBus"></div>
+<form id="bookingForm">
+<label>Passenger Name<input id="passengerName" required></label>
+<label>Mobile Number<input id="passengerMobile" pattern="[0-9]{10}" required></label>
+<label>Number of Seats<input id="seatCount" type="number" min="1" max="6" value="1" required></label>
+<p>Total: ₹<strong id="total">0</strong></p>
+<button class="btn primary full">Confirm Booking</button>
+</form>
+<p id="bookingMessage" class="message"></p>
+</div>
+</div>
+<script src="js/script.js"></script>
 </body>
 </html>

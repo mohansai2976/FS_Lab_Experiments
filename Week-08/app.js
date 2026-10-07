@@ -4,29 +4,25 @@ const path = require("path");
 
 const app = express();
 const PORT = 3000;
-const usersFile = path.join(__dirname, "users.json");
 
-// Middleware
-app.use(express.urlencoded({ extended: true }));
+const USERS_FILE = path.join(__dirname, "users.json");
+const BOOKINGS_FILE = path.join(__dirname, "bookings.json");
+
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Read users from JSON
-function readUsers() {
+function readJSON(file) {
   try {
-    if (!fs.existsSync(usersFile)) {
-      fs.writeFileSync(usersFile, "[]");
-    }
-    return JSON.parse(fs.readFileSync(usersFile, "utf8"));
-  } catch (error) {
-    console.error("Error reading users.json:", error);
+    if (!fs.existsSync(file)) fs.writeFileSync(file, "[]");
+    return JSON.parse(fs.readFileSync(file, "utf8") || "[]");
+  } catch {
     return [];
   }
 }
 
-// Write users to JSON
-function writeUsers(users) {
-  fs.writeFileSync(usersFile, JSON.stringify(users, null, 2));
+function writeJSON(file, data) {
+  fs.writeFileSync(file, JSON.stringify(data, null, 2));
 }
 
 // Landing page
@@ -34,180 +30,106 @@ app.get("/", (req, res) => {
   res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-// Registration page
-app.get("/register", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "register.html"));
-});
-
-// Registration POST route
+// Register
 app.post("/register", (req, res) => {
   const { name, age, dob, gender, email, mobile, username, password, address } = req.body;
 
-  if (!name || !email || !username || !password) {
-    return res.status(400).send(`
-      <h2>Registration failed</h2>
-      <p>Name, email, username and password are required.</p>
-      <a href="/register">Go back</a>
-    `);
+  if (!name || !email || !mobile || !username || !password) {
+    return res.status(400).json({ success: false, message: "Please fill all required fields." });
   }
 
-  const users = readUsers();
+  const users = readJSON(USERS_FILE);
 
-  const existingUser = users.find(
-    user => user.username === username || user.email === email
-  );
-
-  if (existingUser) {
-    return res.status(409).send(`
-      <h2>Registration failed</h2>
-      <p>Username or email already exists.</p>
-      <a href="/register">Try again</a>
-    `);
+  if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+    return res.status(409).json({ success: false, message: "Username already exists." });
   }
 
-  const newUser = {
-    name,
-    age,
-    dob,
-    gender,
-    email,
-    mobile,
-    username,
-    password,
-    address
-  };
+  if (users.some(u => u.email.toLowerCase() === email.toLowerCase())) {
+    return res.status(409).json({ success: false, message: "Email already registered." });
+  }
 
-  users.push(newUser);
-  writeUsers(users);
+  users.push({
+    id: Date.now(),
+    name, age, dob, gender, email, mobile, username, password, address
+  });
 
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Registration Successful</title>
-      <link rel="stylesheet" href="/css/style.css">
-    </head>
-    <body>
-      <div class="message-card">
-        <div class="success-icon">✓</div>
-        <h1>Registration Successful</h1>
-        <p>Your account has been created successfully.</p>
-        <a class="btn" href="/login">Go to Login</a>
-      </div>
-    </body>
-    </html>
-  `);
+  writeJSON(USERS_FILE, users);
+  res.json({ success: true, message: "Registration successful. You can now login." });
 });
 
-// Login page
-app.get("/login", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "login.html"));
-});
-
-// Login POST route
+// Login
 app.post("/login", (req, res) => {
-  const { username, password } = req.body;
-  const users = readUsers();
+  const { identifier, password } = req.body;
+  const users = readJSON(USERS_FILE);
 
   const user = users.find(
-    u => (u.username === username || u.email === username) &&
-         u.password === password
+    u => (u.username === identifier || u.email === identifier) && u.password === password
   );
 
   if (!user) {
-    return res.status(401).send(`
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Login Failed</title>
-        <link rel="stylesheet" href="/css/style.css">
-      </head>
-      <body>
-        <div class="message-card">
-          <div class="error-icon">!</div>
-          <h1>Login Failed</h1>
-          <p>Invalid username/email or password.</p>
-          <a class="btn" href="/login">Try Again</a>
-        </div>
-      </body>
-      </html>
-    `);
+    return res.status(401).json({ success: false, message: "Invalid username/email or password." });
   }
 
-  res.send(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Dashboard</title>
-      <link rel="stylesheet" href="/css/style.css">
-    </head>
-    <body>
-      <nav class="navbar">
-        <a class="logo" href="/">BankEase</a>
-        <a class="nav-link" href="/">Home</a>
-        <a class="nav-link" href="/login">Logout</a>
-      </nav>
-
-      <main class="dashboard">
-        <div class="dashboard-header">
-          <div>
-            <p class="eyebrow">ONLINE BANKING SYSTEM</p>
-            <h1>Welcome, ${escapeHtml(user.name)}</h1>
-            <p>Your banking dashboard is ready.</p>
-          </div>
-          <a class="btn secondary" href="/login">Logout</a>
-        </div>
-
-        <div class="dashboard-grid">
-          <div class="dash-card">
-            <span class="card-icon">₹</span>
-            <h3>Account Balance</h3>
-            <p class="balance">₹ 25,000.00</p>
-            <small>Demo account balance</small>
-          </div>
-
-          <div class="dash-card">
-            <span class="card-icon">▣</span>
-            <h3>Account Holder</h3>
-            <p>${escapeHtml(user.name)}</p>
-            <small>${escapeHtml(user.email)}</small>
-          </div>
-
-          <div class="dash-card">
-            <span class="card-icon">ID</span>
-            <h3>Username</h3>
-            <p>${escapeHtml(user.username)}</p>
-            <small>Verified account</small>
-          </div>
-        </div>
-
-        <section class="profile-box">
-          <h2>Profile Information</h2>
-          <div class="profile-grid">
-            <p><strong>Name</strong><span>${escapeHtml(user.name)}</span></p>
-            <p><strong>Age</strong><span>${escapeHtml(user.age || "Not provided")}</span></p>
-            <p><strong>Date of Birth</strong><span>${escapeHtml(user.dob || "Not provided")}</span></p>
-            <p><strong>Gender</strong><span>${escapeHtml(user.gender || "Not provided")}</span></p>
-            <p><strong>Mobile</strong><span>${escapeHtml(user.mobile || "Not provided")}</span></p>
-            <p><strong>Address</strong><span>${escapeHtml(user.address || "Not provided")}</span></p>
-          </div>
-        </section>
-      </main>
-    </body>
-    </html>
-  `);
+  res.json({
+    success: true,
+    message: "Login successful.",
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      username: user.username,
+      mobile: user.mobile
+    }
+  });
 });
 
-// Prevent HTML injection when displaying stored values
-function escapeHtml(value) {
-  return String(value)
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
-}
+// Get buses
+app.get("/api/buses", (req, res) => {
+  res.json([
+    { id: 1, operator: "APSRTC Express", from: "Visakhapatnam", to: "Vijayawada", time: "06:30 AM", arrival: "01:00 PM", price: 520, seats: 18, type: "AC Seater" },
+    { id: 2, operator: "Orange Travels", from: "Visakhapatnam", to: "Hyderabad", time: "08:00 PM", arrival: "07:00 AM", price: 950, seats: 12, type: "AC Sleeper" },
+    { id: 3, operator: "Sri Krishna Travels", from: "Visakhapatnam", to: "Tirupati", time: "07:30 PM", arrival: "09:00 AM", price: 1100, seats: 20, type: "AC Sleeper" },
+    { id: 4, operator: "Morning Star", from: "Vijayawada", to: "Visakhapatnam", time: "07:00 AM", arrival: "12:30 PM", price: 500, seats: 15, type: "Non-AC Seater" },
+    { id: 5, operator: "SVKDT Travels", from: "Hyderabad", to: "Visakhapatnam", time: "09:00 PM", arrival: "08:00 AM", price: 900, seats: 10, type: "AC Sleeper" }
+  ]);
+});
+
+// Create booking
+app.post("/api/bookings", (req, res) => {
+  const { userId, passengerName, mobile, busId, busOperator, from, to, date, seats, amount } = req.body;
+
+  if (!userId || !passengerName || !mobile || !busId || !date || !seats || !amount) {
+    return res.status(400).json({ success: false, message: "Missing booking details." });
+  }
+
+  const bookings = readJSON(BOOKINGS_FILE);
+  const booking = {
+    id: "BK" + Date.now(),
+    userId,
+    passengerName,
+    mobile,
+    busId,
+    busOperator,
+    from,
+    to,
+    date,
+    seats,
+    amount,
+    bookedAt: new Date().toISOString()
+  };
+
+  bookings.push(booking);
+  writeJSON(BOOKINGS_FILE, bookings);
+
+  res.json({ success: true, message: "Bus booked successfully.", booking });
+});
+
+// User bookings
+app.get("/api/bookings/:userId", (req, res) => {
+  const bookings = readJSON(BOOKINGS_FILE);
+  res.json(bookings.filter(b => String(b.userId) === String(req.params.userId)));
+});
 
 app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
+  console.log(`Bus Booking System running at http://localhost:${PORT}`);
 });
